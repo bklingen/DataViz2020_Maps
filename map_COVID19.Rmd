@@ -1,0 +1,40 @@
+---
+title: "maps"
+author: "Simona Rahi"
+date: "3/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+mygitpath <- 'https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/master/CoronaCases.csv'
+corona <- read_csv(mygitpath)
+library(maps)
+library(dplyr)
+library(mapproj)
+```
+
+```{r}
+counties.cases <- corona %>% group_by(County) %>% tally() %>% mutate(County=tolower(County)) %>% drop_na()
+```
+
+```{r}
+countydata <- map_data("county") %>% filter(region=="florida") %>% drop_na()
+```
+
+```{r}
+wbmap <- left_join(counties.cases, countydata, by=c("County"="subregion"))
+```
+
+```{r}
+ggplot(wbmap, aes(x=long, y=lat, group=group, fill=wbmap$n)) + 
+  geom_polygon(color="black", size=0.5) + theme_minimal() + 
+  coord_map(projection = "mercator", xlim=c(-90, -77), ylim=c(22, 33)) + 
+  labs(title="COVID-19 Cases in Florida by County", fill="Number of Cases") + 
+  scale_fill_viridis_c()
+```
+
+
