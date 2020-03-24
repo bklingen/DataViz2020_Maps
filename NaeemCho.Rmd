@@ -1,0 +1,4 @@
+
+```{r}
+testRmd <- c('This is a test')
+```
