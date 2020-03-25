@@ -1,0 +1,36 @@
+---
+title: "map"
+author: "Jeeda AbuKhader"
+date: "3/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(maps)
+
+mygitpath <- 'https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/master/CoronaCases.csv'
+corona <- read_csv(mygitpath)
+corona
+
+regions <- map_data("county")
+regions <- filter(regions, region=="florida")
+
+coronanum <- corona %>% count(County)
+regionsnum <- regions %>% count(subregion)
+
+coronanum$County <- tolower(coronanum$County)
+
+corona3 <- regions %>% left_join(coronanum, by=c("subregion"="County"))
+
+ggplot(corona3, aes(x=long, y=lat, group= group, fill=n)) + 
+  geom_polygon(color="black", size= 0.5) +theme_minimal() +
+  scale_fill_viridis_c() +
+  labs(title = "Coronavirus in Florida", fill="Cases")
+                                 
+```
+
