@@ -15,10 +15,13 @@ corona <- read_csv(mygitpath)
 library(maps)
 library(dplyr)
 library(mapproj)
+library(tidyverse)
+library(forcats)
 ```
 
 ```{r}
-counties.cases <- corona %>% group_by(County) %>% tally() %>% mutate(County=tolower(County)) %>% drop_na()
+counties.cases <- corona %>% group_by(County) %>% tally() %>% mutate(County=tolower(County)) %>% mutate(County = fct_recode(County, `miami-dade` = "dade", `st johns` = "st. johns", `st lucie` = "st. lucie")) %>% drop_na()
+
 ```
 
 ```{r}
@@ -26,15 +29,17 @@ countydata <- map_data("county") %>% filter(region=="florida") %>% drop_na()
 ```
 
 ```{r}
-wbmap <- left_join(counties.cases, countydata, by=c("County"="subregion"))
+setdiff(counties.cases$County, countydata$subregion)
+covidmap <- left_join(counties.cases, countydata, by=c("County"="subregion"))
 ```
 
 ```{r}
-ggplot(wbmap, aes(x=long, y=lat, group=group, fill=wbmap$n)) + 
+ggplot(covidmap, aes(x=long, y=lat, group=group, fill=wbmap$n)) + 
   geom_polygon(color="black", size=0.5) + theme_minimal() + 
-  coord_map(projection = "mercator", xlim=c(-90, -77), ylim=c(22, 33)) + 
-  labs(title="COVID-19 Cases in Florida by County", fill="Number of Cases") + 
-  scale_fill_viridis_c()
+  coord_map(projection = "mercator", xlim=c(-90, -77), ylim=c(23, 33)) + 
+  labs(title="COVID-19 Cases in Florida by County", fill="Number of Cases") 
+ 
+  #scale_fill_viridis_c()
 ```
 
 
