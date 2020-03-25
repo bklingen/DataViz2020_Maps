@@ -30,7 +30,7 @@ corona3 <- regions %>% left_join(coronanum, by=c("subregion"="County"))
 ggplot(corona3, aes(x=long, y=lat, group= group, fill=n)) + 
   geom_polygon(color="black", size= 0.5) +theme_minimal() +
   scale_fill_viridis_c() +
-  labs(title = "Coronavirus in Florida", fill="Cases")
+  labs(title = "COVID-19 Spread in Florida", fill="Number of Cases")
                                  
 ```
 
