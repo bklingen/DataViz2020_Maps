@@ -2,3 +2,9 @@ mygitpath <- 'https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/master
 library(tidyverse)
 corona <- read_csv(mygitpath)
 corona
+
+library(tidyverse)
+
+
+library(maps)
+
