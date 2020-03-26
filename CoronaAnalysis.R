@@ -34,7 +34,9 @@ corona <- corona %>%
 
 # using subseting I changed dade to miami-dade
 
-corona$County[11] = 'miami-dade'
+corona$County[11] <- 'miami-dade'
+corona$County[39] <- 'st johns'
+corona$County[40] <- 'st lucie'
 
 # now merge the two dataset 
 florida <- left_join(florida, corona, by = c("subregion"="County"))
@@ -43,7 +45,7 @@ florida$n[is.na(florida$n)] <- 0
 # create the base plot of the state with counties 
 # # this code comes from the R Handout on our Canvas Page
 base.plot <- ggplot(florida, aes(x=long, y=lat, group=group)) + 
-  geom_polygon(aes(fill=n),color="purple", size=0.1) + 
+  geom_polygon(aes(fill=n),color="black", size=0.1) + 
   theme_void() + 
   labs(fill="Count of Cases", caption="Covid 19 Cases Across Florida Counties, Source: Florida Deptartment of Health from 3/22/2020") + 
   scale_fill_gradient(low = "aliceblue",
