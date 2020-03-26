@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(mapproj)
+library(tidyverse)
+
+mygitpath <- "https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/master/CoronaCases.csv"
+corona <- read_csv(mygitpath)
+corona <- corona %>% filter(County != "Unknown")
+
+county_data <- map_data("county") %>% filter(region =="florida") 
+unique(county_data$subregion)
+#setdiff(corona$County, unique(county_data$subregion))
+
+corona$County <- tolower(corona$County)
+
+setdiff(corona$County, unique(county_data$subregion))
+
+#county_data1 <- county_data %>% mutate(subregion = )
+
+
+county_data1 <- county_data %>% mutate(subregion = fct_recode(subregion, `st. johns` = "st johns", `st. lucie` = "st lucie", `dade` = "miami-dade"))
+
+
+setdiff(corona$County, unique(county_data1$subregion))
+
+#intersect(corona$County,county_data1$subregion)
+
+corona <- corona %>% group_by(County) %>% mutate(count = n())
+
+coronaMap <- left_join(county_data1, corona, by = c("subregion" = "County"))
+
+ggplot(coronaMap, aes(x = long, y = lat, group = group)) + 
+  geom_polygon(aes(fill = count))
+
+```
+
