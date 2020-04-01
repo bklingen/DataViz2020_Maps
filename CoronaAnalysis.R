@@ -3,13 +3,14 @@ library(tidyverse)
 library(ggplot2)
 library(maps)
 
+
 #Loading data
 corona <- read_csv(mygitpath)
 corona
 
 # Getting the counties map df
 counties_map <- map_data("county")
-counties_map <- filter(counties, region=='florida')
+counties_map <- filter(counties_map, region=='florida')
 
 # Counting cases per county from corona df
 county_cases <- corona %>%
@@ -34,8 +35,9 @@ county_cases$County <- gsub("st. lucie", "st lucie", county_cases$County)
 corona_map <- left_join(counties_map, county_cases, by= c(subregion = "County"))
 
 # Plot
-ggplot(corona_map, aes(x=long, y=lat, group=group, fill=n)) +
+p <- ggplot(corona_map, aes(x=long, y=lat, group=group, fill=n)) +
   geom_polygon(color="black", size=0.5) + theme_minimal() +
   scale_fill_viridis_c() + labs(title= "Corona cases in Florida by County", fill= "Number of cases") +
   coord_map(projection = "albers", lat0 = 25, lat1 = 31)
 
+p
