@@ -5,7 +5,7 @@ library(dplyr)
 library(shinydashboard)
 
 coronaFL <- read_csv('https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/Jamie/CoronaCases.csv')
-Newest <- 
+
 
 dashboardPage(
   dashboardHeader(title = "Florida's Corona Virus Situation"),
@@ -16,7 +16,6 @@ dashboardPage(
       box(width=6, 
           status="info", 
           title="Total Number of Reported Cases by County",
-          footer = Newest,
           solidHeader = TRUE,
           plotOutput("FLmap")
       ),
