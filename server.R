@@ -10,7 +10,7 @@ library(maps)
 library(mapproj)
 
 
-coronaFL <- read_csv('https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/Jamie/CoronaCases.csv')
+coronaFL <- read.csv('https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/master/CoronaCases.csv')
 
 floridaMap <- map_data("county") %>% filter(region == "florida")
 
@@ -27,7 +27,7 @@ shinyServer(function(input, output, session) {
     intervalMillis = 10000, 
     session = session,
     filePath = 'https://raw.githubusercontent.com/bklingen/DataViz2020_Maps/Jamie/CoronaCases.csv',
-    readFunc = read_csv)
+    readFunc = read.csv)
   output$mydata <-renderTable({df() %>% group_by(County) %>%  summarize(Cases = n()) %>%  arrange(desc(Cases)) %>%  slice(c(1:5))
     })
   
