@@ -37,3 +37,12 @@ population$county <- gsub("([A-Za-z]+).*", "\\1", population$county)
 # joining datasets
 join <- inner_join(population, counties, by = c("county"="subregion"))
 
+plot <- ggplot(join, aes(x = long, y = lat, group = group))+
+  geom_polygon(aes(fill = POP_ESTIMATE_2019), color = "black", size = 0.1)+
+  theme_void()+
+  scale_fill_gradient()
+  
+plot
+
+
+
