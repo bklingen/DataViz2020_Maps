@@ -14,6 +14,18 @@ population$Area_Name = str_replace_all(population$Area_Name,"[^[:graph:]]", " ")
 # change all of the names of the places to lower case
 population <- population %>% 
   mutate(county = tolower(Area_Name)) %>% 
-  mutate(state = tolower(State))
-
+  mutate(state = tolower(State)) %>% 
+  select(state, county, CENSUS_2010_POP, 
+         POP_ESTIMATE_2019,
+         N_POP_CHG_2019,
+         Births_2019,
+         Deaths_2019,
+         NATURAL_INC_2019,
+         INTERNATIONAL_MIG_2019,
+         DOMESTIC_MIG_2019,
+         NET_MIG_2019,
+         RESIDUAL_2019,
+         GQ_ESTIMATES_2019,
+         R_birth_2019) %>% 
+  drop_na()
 
