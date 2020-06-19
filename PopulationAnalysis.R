@@ -26,8 +26,9 @@ population <- population %>%
          NET_MIG_2019,
          RESIDUAL_2019,
          GQ_ESTIMATES_2019,
-         R_birth_2019) %>% 
-  drop_na()
+         R_birth_2019) %>%
+  drop_na() %>% 
+  mutate(logarithmic = log(POP_ESTIMATE_2019))
 
 #removing the order column, which messes with the join
 counties <- counties %>% select(-order)
@@ -35,14 +36,13 @@ counties <- counties %>% select(-order)
 population$county <- gsub("([A-Za-z]+).*", "\\1", population$county)
 
 # joining datasets
-join <- inner_join(population, counties, by = c("county"="subregion"))
+join <- left_join(population, counties, by = c("county"="subregion"))
+
+join <- join %>% group_by(county)
 
 plot <- ggplot(join, aes(x = long, y = lat, group = group))+
-  geom_polygon(aes(fill = POP_ESTIMATE_2019), color = "black", size = 0.1)+
+  geom_polygon(aes(fill = logarithmic), color = "black", size = 0.1)+
   theme_void()+
   scale_fill_gradient()
-  
+
 plot
-
-
-
